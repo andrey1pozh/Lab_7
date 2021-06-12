@@ -14,14 +14,14 @@ import server.utility.*;
 public class App {
     private static final int MAX_CLIENTS = 1000;
     public static Logger logger = LogManager.getLogger("ServerLogger");
-    private static String databaseUsername = "s308539";
+    private static String databaseUsername = "postgres";
     private static int port;
     private static String databaseHost;
     private static String databasePassword;
     private static String databaseAddress;
 
     public static void main(String[] args) {
-        if (!initialize(args)) return;
+        if (!initialize(/*args*/)) return;
         DatabaseHandler databaseHandler = new DatabaseHandler(databaseAddress, databaseUsername, databasePassword);
         DatabaseUserManager databaseUserManager = new DatabaseUserManager(databaseHandler);
         DatabaseCollectionManager databaseCollectionManager = new DatabaseCollectionManager(databaseHandler, databaseUserManager);
@@ -54,14 +54,14 @@ public class App {
     /**
      * Controls initialization.
      */
-    private static boolean initialize(String[] args) {
+    private static boolean initialize(/*String[] */) {
         try {
-            if (args.length != 3) throw new WrongAmountOfElementsException();
-            port = Integer.parseInt(args[0]);
+            if (databaseHost == "0") throw new WrongAmountOfElementsException();
+            port = 3085;
             if (port < 0) throw new NotInDeclaredLimitsException();
-            databaseHost = args[1];
-            databasePassword = args[2];
-            databaseAddress = "jdbc:postgresql://" + databaseHost + ":5432/studs";
+            databaseHost = "postgres";
+            databasePassword = "0000";
+            databaseAddress = "jdbc:postgresql://localhost:5432/postgres";
             return true;
         } catch (WrongAmountOfElementsException exception) {
             String jarName = new java.io.File(App.class.getProtectionDomain()

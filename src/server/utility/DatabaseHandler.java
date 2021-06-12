@@ -63,6 +63,7 @@ public class DatabaseHandler {
             Outputer.println("Соединение с базой данных установлено.");
             App.logger.info("Соединение с базой данных установлено.");
         } catch (SQLException exception) {
+            Outputer.printerror(exception.getMessage());
             Outputer.printerror("Произошла ошибка при подключении к базе данных!");
             App.logger.error("Произошла ошибка при подключении к базе данных!");
         } catch (ClassNotFoundException exception) {

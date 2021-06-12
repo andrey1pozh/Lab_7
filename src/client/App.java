@@ -19,7 +19,7 @@ public class App {
     private static final int MAX_RECONNECTION_ATTEMPTS = 5;
 
     private static String host = "127.0.0.1";
-    private static int port = 3523;
+    private static int port = 3085;
 
     public static void main(String[] args) {
         if (!initialize(/*args*/)) return;
