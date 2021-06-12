@@ -36,7 +36,7 @@ public class RegisterCommand extends AbstractCommand {
         } catch (ClassCastException exception) {
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
         } catch (DatabaseHandlingException exception) {
-            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!");
+            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!333333");
         } catch (UserAlreadyExists exception) {
             ResponseOutputer.appenderror("Пользователь " + user.getUsername() + " уже существует!");
         }

@@ -4,6 +4,7 @@ import common.exceptions.DatabaseHandlingException;
 import common.exceptions.UserIsNotFoundException;
 import common.exceptions.WrongAmountOfElementsException;
 import common.interaction.User;
+import common.utility.Outputer;
 import server.utility.DatabaseUserManager;
 import server.utility.ResponseOutputer;
 
@@ -36,7 +37,8 @@ public class LoginCommand extends AbstractCommand {
         } catch (ClassCastException exception) {
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
         } catch (DatabaseHandlingException exception) {
-            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!");
+            Outputer.println(exception.getMessage());
+            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!11111111");
         } catch (UserIsNotFoundException exception) {
             ResponseOutputer.appenderror("Неправильные имя пользователя или пароль!");
         }
