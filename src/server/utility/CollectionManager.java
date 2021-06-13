@@ -159,13 +159,15 @@ public class CollectionManager {
      */
     private void loadCollection() {
         try {
+            Outputer.printerror("тест");
             marinesCollection = databaseCollectionManager.getCollection();
             lastInitTime = LocalDateTime.now();
             Outputer.println("Коллекция загружена.");
             App.logger.info("Коллекция загружена.");
         } catch (DatabaseHandlingException exception) {
             marinesCollection = new TreeSet<>();
-            Outputer.printerror("Коллекция не может быть загружена!");
+            Outputer.printerror("тест3");
+            Outputer.printerror("Коллекция не может быть загружена!" + exception.getMessage());
             App.logger.error("Коллекция не может быть загружена!");
         }
     }

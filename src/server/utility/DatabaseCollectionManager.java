@@ -129,6 +129,7 @@ public class DatabaseCollectionManager {
         PreparedStatement preparedSelectAllStatement = null;
         try {
             preparedSelectAllStatement = databaseHandler.getPreparedStatement(SELECT_ALL_MARINES, false);
+            Outputer.print(databaseHandler.getPreparedStatement(SELECT_ALL_MARINES, false));
             ResultSet resultSet = preparedSelectAllStatement.executeQuery();
             while (resultSet.next()) {
                 marineList.add(createMarine(resultSet));

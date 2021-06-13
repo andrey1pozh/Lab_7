@@ -8,7 +8,8 @@ import common.utility.Outputer;
 
 import java.util.Scanner;
 
-/**
+/**q
+ *
  * Main client class. Creates all client instances.
  */
 public class App {
