@@ -4,6 +4,7 @@ import common.exceptions.DatabaseHandlingException;
 import common.exceptions.UserAlreadyExists;
 import common.exceptions.WrongAmountOfElementsException;
 import common.interaction.User;
+import common.utility.Outputer;
 import server.utility.DatabaseUserManager;
 import server.utility.ResponseOutputer;
 
@@ -36,7 +37,8 @@ public class RegisterCommand extends AbstractCommand {
         } catch (ClassCastException exception) {
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
         } catch (DatabaseHandlingException exception) {
-            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!333333");
+            Outputer.println(exception.getMessage() + "тест");
+            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!333333" + exception.getMessage() + "тест");
         } catch (UserAlreadyExists exception) {
             ResponseOutputer.appenderror("Пользователь " + user.getUsername() + " уже существует!");
         }

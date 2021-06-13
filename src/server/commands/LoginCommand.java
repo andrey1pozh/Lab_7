@@ -37,8 +37,7 @@ public class LoginCommand extends AbstractCommand {
         } catch (ClassCastException exception) {
             ResponseOutputer.appenderror("Переданный клиентом объект неверен!");
         } catch (DatabaseHandlingException exception) {
-            Outputer.println(exception.getMessage());
-            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!11111111");
+            ResponseOutputer.appenderror("Произошла ошибка при обращении к базе данных!11111111" + exception.getMessage() + "тест");
         } catch (UserIsNotFoundException exception) {
             ResponseOutputer.appenderror("Неправильные имя пользователя или пароль!");
         }
