@@ -231,7 +231,6 @@ public class DatabaseCollectionManager {
      * @throws DatabaseHandlingException When there's exception inside.
      */
     public SpaceMarine insertMarine(MarineRaw marineRaw, User user) throws DatabaseHandlingException {
-        // TODO: Если делаем орден уникальным, тут че-то много всего менять
         SpaceMarine marine;
         PreparedStatement preparedInsertMarineStatement = null;
         PreparedStatement preparedInsertCoordinatesStatement = null;
