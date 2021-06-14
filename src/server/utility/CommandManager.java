@@ -2,6 +2,7 @@ package server.utility;
 
 import common.exceptions.HistoryIsEmptyException;
 import common.interaction.User;
+import common.utility.Outputer;
 import server.commands.Command;
 
 import java.util.ArrayList;
@@ -146,6 +147,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean show(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("show(CommandManager)");
         collectionLocker.readLock().lock();
         try {
             return showCommand.execute(stringArgument, objectArgument, user);
@@ -163,6 +165,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean add(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("add(CommandManager)");
         collectionLocker.writeLock().lock();
         try {
             return addCommand.execute(stringArgument, objectArgument, user);
@@ -180,6 +183,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean update(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("update(CommandManager)");
         collectionLocker.writeLock().lock();
         try {
             return updateCommand.execute(stringArgument, objectArgument, user);
@@ -197,6 +201,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean removeById(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("removeById(CommandManager)");
         collectionLocker.writeLock().lock();
         try {
             return removeByIdCommand.execute(stringArgument, objectArgument, user);
@@ -214,6 +219,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean clear(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("clear(CommandManager)");
         collectionLocker.writeLock().lock();
         try {
             return clearCommand.execute(stringArgument, objectArgument, user);
@@ -231,6 +237,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean exit(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("exit(CommandManager)");
         return exitCommand.execute(stringArgument, objectArgument, user);
     }
 
@@ -243,6 +250,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean executeScript(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("executeScript(CommandManager)");
         return executeScriptCommand.execute(stringArgument, objectArgument, user);
     }
 
@@ -255,6 +263,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean addIfMin(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("addIfMin(CommandManager)");
         collectionLocker.writeLock().lock();
         try {
             return addIfMinCommand.execute(stringArgument, objectArgument, user);
@@ -272,6 +281,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean removeGreater(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("removeGreater(CommandManager)");
         collectionLocker.writeLock().lock();
         try {
             return removeGreaterCommand.execute(stringArgument, objectArgument, user);
@@ -289,6 +299,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean history(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("history(CommandManager)");
         if (historyCommand.execute(stringArgument, objectArgument, user)) {
             historyLocker.readLock().lock();
             try {
@@ -316,6 +327,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean sumOfHealth(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("sumOfHealth(CommandManager)");
         collectionLocker.readLock().lock();
         try {
             return sumOfHealthCommand.execute(stringArgument, objectArgument, user);
@@ -333,6 +345,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean maxByMeleeWeapon(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("maxByMeleeWeapon(CommandManager)");
         collectionLocker.readLock().lock();
         try {
             return maxByMeleeWeaponCommand.execute(stringArgument, objectArgument, user);
@@ -350,6 +363,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean filterByWeaponType(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("filterByWeaponType(CommandManager)");
         collectionLocker.readLock().lock();
         try {
             return filterByWeaponTypeCommand.execute(stringArgument, objectArgument, user);
@@ -367,6 +381,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean serverExit(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("serverExit(CommandManager)");
         return serverExitCommand.execute(stringArgument, objectArgument, user);
     }
 
@@ -379,6 +394,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean login(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("login(CommandManager)");
         return loginCommand.execute(stringArgument, objectArgument, user);
     }
 
@@ -391,6 +407,7 @@ public class CommandManager {
      * @return Command exit status.
      */
     public boolean register(String stringArgument, Object objectArgument, User user) {
+        Outputer.println("register(CommandManager)");
         return registerCommand.execute(stringArgument, objectArgument, user);
     }
 }

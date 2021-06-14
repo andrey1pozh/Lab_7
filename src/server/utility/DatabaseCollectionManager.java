@@ -34,8 +34,8 @@ public class DatabaseCollectionManager {
             DatabaseHandler.MARINE_TABLE_WEAPON_TYPE_COLUMN + ", " +
             DatabaseHandler.MARINE_TABLE_MELEE_WEAPON_COLUMN + ", " +
             DatabaseHandler.MARINE_TABLE_CHAPTER_ID_COLUMN + ", " +
-            DatabaseHandler.MARINE_TABLE_USER_ID_COLUMN + ") VALUES (?, ?, ?, ?::astartes_category," +
-            "?::weapon, ?::melee_weapon, ?, ?)";
+            DatabaseHandler.MARINE_TABLE_USER_ID_COLUMN + ") VALUES (?, ?, ?, ?," +
+            "?, ?, ?, ?)";
     private final String DELETE_MARINE_BY_ID = "DELETE FROM " + DatabaseHandler.MARINE_TABLE +
             " WHERE " + DatabaseHandler.MARINE_TABLE_ID_COLUMN + " = ?";
     private final String UPDATE_MARINE_NAME_BY_ID = "UPDATE " + DatabaseHandler.MARINE_TABLE + " SET " +
@@ -96,6 +96,7 @@ public class DatabaseCollectionManager {
      * @throws SQLException When there's exception inside.
      */
     private SpaceMarine createMarine(ResultSet resultSet) throws SQLException {
+        Outputer.println("createMarine(DatabaseCollectionManager)");
         long id = resultSet.getLong(DatabaseHandler.MARINE_TABLE_ID_COLUMN);
         String name = resultSet.getString(DatabaseHandler.MARINE_TABLE_NAME_COLUMN);
         LocalDateTime creationDate = resultSet.getTimestamp(DatabaseHandler.MARINE_TABLE_CREATION_DATE_COLUMN).toLocalDateTime();
@@ -125,6 +126,7 @@ public class DatabaseCollectionManager {
      * @throws DatabaseHandlingException When there's exception inside.
      */
     public NavigableSet<SpaceMarine> getCollection() throws DatabaseHandlingException {
+        Outputer.println("getCollection(DatabaseCollectionManager)");
         NavigableSet<SpaceMarine> marineList = new TreeSet<>();
         PreparedStatement preparedSelectAllStatement = null;
         try {
@@ -148,18 +150,19 @@ public class DatabaseCollectionManager {
      * @throws SQLException When there's exception inside.
      */
     private long getChapterIdByMarineId(long marineId) throws SQLException {
+        Outputer.println("getChapterIdByMarineId(DatabaseCollectionManager)");
         long chapterId;
         PreparedStatement preparedSelectMarineByIdStatement = null;
         try {
             preparedSelectMarineByIdStatement = databaseHandler.getPreparedStatement(SELECT_MARINE_BY_ID, false);
             preparedSelectMarineByIdStatement.setLong(1, marineId);
             ResultSet resultSet = preparedSelectMarineByIdStatement.executeQuery();
-            App.logger.info("Выполнен запрос SELECT_MARINE_BY_ID.");
+            Outputer.println("Выполнен запрос SELECT_MARINE_BY_ID.");
             if (resultSet.next()) {
                 chapterId = resultSet.getLong(DatabaseHandler.MARINE_TABLE_CHAPTER_ID_COLUMN);
             } else throw new SQLException();
         } catch (SQLException exception) {
-            App.logger.error("Произошла ошибка при выполнении запроса SELECT_MARINE_BY_ID!");
+            Outputer.println("Произошла ошибка при выполнении запроса SELECT_MARINE_BY_ID!");
             throw new SQLException(exception);
         } finally {
             databaseHandler.closePreparedStatement(preparedSelectMarineByIdStatement);
@@ -173,6 +176,7 @@ public class DatabaseCollectionManager {
      * @throws SQLException When there's exception inside.
      */
     private Coordinates getCoordinatesByMarineId(long marineId) throws SQLException {
+        Outputer.println("getCoordinatesByMarineId(DatabaseCollectionManager)");
         Coordinates coordinates;
         PreparedStatement preparedSelectCoordinatesByMarineIdStatement = null;
         try {
@@ -180,7 +184,7 @@ public class DatabaseCollectionManager {
                     databaseHandler.getPreparedStatement(SELECT_COORDINATES_BY_MARINE_ID, false);
             preparedSelectCoordinatesByMarineIdStatement.setLong(1, marineId);
             ResultSet resultSet = preparedSelectCoordinatesByMarineIdStatement.executeQuery();
-            App.logger.info("Выполнен запрос SELECT_COORDINATES_BY_MARINE_ID.");
+            Outputer.println("Выполнен запрос SELECT_COORDINATES_BY_MARINE_ID.");
             if (resultSet.next()) {
                 coordinates = new Coordinates(
                         resultSet.getDouble(DatabaseHandler.COORDINATES_TABLE_X_COLUMN),
@@ -188,7 +192,7 @@ public class DatabaseCollectionManager {
                 );
             } else throw new SQLException();
         } catch (SQLException exception) {
-            App.logger.error("Произошла ошибка при выполнении запроса SELECT_COORDINATES_BY_MARINE_ID!");
+            Outputer.println("Произошла ошибка при выполнении запроса SELECT_COORDINATES_BY_MARINE_ID!");
             throw new SQLException(exception);
         } finally {
             databaseHandler.closePreparedStatement(preparedSelectCoordinatesByMarineIdStatement);
@@ -202,6 +206,7 @@ public class DatabaseCollectionManager {
      * @throws SQLException When there's exception inside.
      */
     private Chapter getChapterById(long chapterId) throws SQLException {
+        Outputer.println("getChapterById(DatabaseCollectionManager)");
         Chapter chapter;
         PreparedStatement preparedSelectChapterByIdStatement = null;
         try {
@@ -209,7 +214,7 @@ public class DatabaseCollectionManager {
                     databaseHandler.getPreparedStatement(SELECT_CHAPTER_BY_ID, false);
             preparedSelectChapterByIdStatement.setLong(1, chapterId);
             ResultSet resultSet = preparedSelectChapterByIdStatement.executeQuery();
-            App.logger.info("Выполнен запрос SELECT_CHAPTER_BY_ID.");
+            Outputer.println("Выполнен запрос SELECT_CHAPTER_BY_ID.");
             if (resultSet.next()) {
                 chapter = new Chapter(
                         resultSet.getString(DatabaseHandler.CHAPTER_TABLE_NAME_COLUMN),
@@ -217,7 +222,7 @@ public class DatabaseCollectionManager {
                 );
             } else throw new SQLException();
         } catch (SQLException exception) {
-            App.logger.error("Произошла ошибка при выполнении запроса SELECT_CHAPTER_BY_ID!");
+            Outputer.println("Произошла ошибка при выполнении запроса SELECT_CHAPTER_BY_ID!");
             throw new SQLException(exception);
         } finally {
             databaseHandler.closePreparedStatement(preparedSelectChapterByIdStatement);
@@ -232,6 +237,7 @@ public class DatabaseCollectionManager {
      * @throws DatabaseHandlingException When there's exception inside.
      */
     public SpaceMarine insertMarine(MarineRaw marineRaw, User user) throws DatabaseHandlingException {
+        Outputer.println("insertMarine(DatabaseCollectionManager)");
         SpaceMarine marine;
         PreparedStatement preparedInsertMarineStatement = null;
         PreparedStatement preparedInsertCoordinatesStatement = null;
@@ -254,7 +260,7 @@ public class DatabaseCollectionManager {
             if (generatedChapterKeys.next()) {
                 chapterId = generatedChapterKeys.getLong(1);
             } else throw new SQLException();
-            App.logger.info("Выполнен запрос INSERT_CHAPTER.");
+            Outputer.println("Выполнен запрос INSERT_CHAPTER.");
 
             preparedInsertMarineStatement.setString(1, marineRaw.getName());
             preparedInsertMarineStatement.setTimestamp(2, Timestamp.valueOf(creationTime));
@@ -270,13 +276,13 @@ public class DatabaseCollectionManager {
             if (generatedMarineKeys.next()) {
                 spaceMarineId = generatedMarineKeys.getLong(1);
             } else throw new SQLException();
-            App.logger.info("Выполнен запрос INSERT_MARINE.");
+            Outputer.println("Выполнен запрос INSERT_MARINE.");
 
             preparedInsertCoordinatesStatement.setLong(1, spaceMarineId);
             preparedInsertCoordinatesStatement.setDouble(2, marineRaw.getCoordinates().getX());
             preparedInsertCoordinatesStatement.setFloat(3, marineRaw.getCoordinates().getY());
             if (preparedInsertCoordinatesStatement.executeUpdate() == 0) throw new SQLException();
-            App.logger.info("Выполнен запрос INSERT_COORDINATES.");
+            Outputer.println("Выполнен запрос INSERT_COORDINATES.");
 
             marine = new SpaceMarine(
                     spaceMarineId,
@@ -294,7 +300,8 @@ public class DatabaseCollectionManager {
             databaseHandler.commit();
             return marine;
         } catch (SQLException exception) {
-            App.logger.error("Произошла ошибка при выполнении группы запросов на добавление нового объекта!");
+            Outputer.println(exception.getMessage());
+            Outputer.println("Произошла ошибка при выполнении группы запросов на добавление нового объекта!");
             databaseHandler.rollback();
             throw new DatabaseHandlingException();
         } finally {
@@ -311,7 +318,7 @@ public class DatabaseCollectionManager {
      * @throws DatabaseHandlingException When there's exception inside.
      */
     public void updateMarineById(long marineId, MarineRaw marineRaw) throws DatabaseHandlingException {
-        // TODO: Если делаем орден уникальным, тут че-то много всего менять
+        Outputer.println("updateMarineById(DatabaseCollectionManager)");
         PreparedStatement preparedUpdateMarineNameByIdStatement = null;
         PreparedStatement preparedUpdateMarineHealthByIdStatement = null;
         PreparedStatement preparedUpdateMarineCategoryByIdStatement = null;
@@ -335,50 +342,50 @@ public class DatabaseCollectionManager {
                 preparedUpdateMarineNameByIdStatement.setString(1, marineRaw.getName());
                 preparedUpdateMarineNameByIdStatement.setLong(2, marineId);
                 if (preparedUpdateMarineNameByIdStatement.executeUpdate() == 0) throw new SQLException();
-                App.logger.info("Выполнен запрос UPDATE_MARINE_NAME_BY_ID.");
+                Outputer.println("Выполнен запрос UPDATE_MARINE_NAME_BY_ID.");
             }
             if (marineRaw.getCoordinates() != null) {
                 preparedUpdateCoordinatesByMarineIdStatement.setDouble(1, marineRaw.getCoordinates().getX());
                 preparedUpdateCoordinatesByMarineIdStatement.setFloat(2, marineRaw.getCoordinates().getY());
                 preparedUpdateCoordinatesByMarineIdStatement.setLong(3, marineId);
                 if (preparedUpdateCoordinatesByMarineIdStatement.executeUpdate() == 0) throw new SQLException();
-                App.logger.info("Выполнен запрос UPDATE_COORDINATES_BY_MARINE_ID.");
+                Outputer.println("Выполнен запрос UPDATE_COORDINATES_BY_MARINE_ID.");
             }
             if (marineRaw.getHealth() != -1) {
                 preparedUpdateMarineHealthByIdStatement.setDouble(1, marineRaw.getHealth());
                 preparedUpdateMarineHealthByIdStatement.setLong(2, marineId);
                 if (preparedUpdateMarineHealthByIdStatement.executeUpdate() == 0) throw new SQLException();
-                App.logger.info("Выполнен запрос UPDATE_MARINE_HEALTH_BY_ID.");
+                Outputer.println("Выполнен запрос UPDATE_MARINE_HEALTH_BY_ID.");
             }
             if (marineRaw.getCategory() != null) {
                 preparedUpdateMarineCategoryByIdStatement.setString(1, marineRaw.getCategory().toString());
                 preparedUpdateMarineCategoryByIdStatement.setLong(2, marineId);
                 if (preparedUpdateMarineCategoryByIdStatement.executeUpdate() == 0) throw new SQLException();
-                App.logger.info("Выполнен запрос UPDATE_MARINE_CATEGORY_BY_ID.");
+                Outputer.println("Выполнен запрос UPDATE_MARINE_CATEGORY_BY_ID.");
             }
             if (marineRaw.getWeaponType() != null) {
                 preparedUpdateMarineWeaponTypeByIdStatement.setString(1, marineRaw.getWeaponType().toString());
                 preparedUpdateMarineWeaponTypeByIdStatement.setLong(2, marineId);
                 if (preparedUpdateMarineWeaponTypeByIdStatement.executeUpdate() == 0) throw new SQLException();
-                App.logger.info("Выполнен запрос UPDATE_MARINE_WEAPON_TYPE_BY_ID.");
+                Outputer.println("Выполнен запрос UPDATE_MARINE_WEAPON_TYPE_BY_ID.");
             }
             if (marineRaw.getMeleeWeapon() != null) {
                 preparedUpdateMarineMeleeWeaponByIdStatement.setString(1, marineRaw.getMeleeWeapon().toString());
                 preparedUpdateMarineMeleeWeaponByIdStatement.setLong(2, marineId);
                 if (preparedUpdateMarineMeleeWeaponByIdStatement.executeUpdate() == 0) throw new SQLException();
-                App.logger.info("Выполнен запрос UPDATE_MARINE_MELEE_WEAPON_BY_ID.");
+                Outputer.println("Выполнен запрос UPDATE_MARINE_MELEE_WEAPON_BY_ID.");
             }
             if (marineRaw.getChapter() != null) {
                 preparedUpdateChapterByIdStatement.setString(1, marineRaw.getChapter().getName());
                 preparedUpdateChapterByIdStatement.setLong(2, marineRaw.getChapter().getMarinesCount());
                 preparedUpdateChapterByIdStatement.setLong(3, getChapterIdByMarineId(marineId));
                 if (preparedUpdateChapterByIdStatement.executeUpdate() == 0) throw new SQLException();
-                App.logger.info("Выполнен запрос UPDATE_CHAPTER_BY_ID.");
+                Outputer.println("Выполнен запрос UPDATE_CHAPTER_BY_ID.");
             }
 
             databaseHandler.commit();
         } catch (SQLException exception) {
-            App.logger.error("Произошла ошибка при выполнении группы запросов на обновление объекта!");
+            Outputer.println("Произошла ошибка при выполнении группы запросов на обновление объекта!");
             databaseHandler.rollback();
             throw new DatabaseHandlingException();
         } finally {
@@ -400,15 +407,15 @@ public class DatabaseCollectionManager {
      * @throws DatabaseHandlingException When there's exception inside.
      */
     public void deleteMarineById(long marineId) throws DatabaseHandlingException {
-        // TODO: Если делаем орден уникальным, тут че-то много всего менять
+        Outputer.println("deleteMarineById(DatabaseCollectionManager)");
         PreparedStatement preparedDeleteChapterByIdStatement = null;
         try {
             preparedDeleteChapterByIdStatement = databaseHandler.getPreparedStatement(DELETE_CHAPTER_BY_ID, false);
             preparedDeleteChapterByIdStatement.setLong(1, getChapterIdByMarineId(marineId));
             if (preparedDeleteChapterByIdStatement.executeUpdate() == 0) Outputer.println(3);
-            App.logger.info("Выполнен запрос DELETE_CHAPTER_BY_ID.");
+            Outputer.println("Выполнен запрос DELETE_CHAPTER_BY_ID.");
         } catch (SQLException exception) {
-            App.logger.error("Произошла ошибка при выполнении запроса DELETE_CHAPTER_BY_ID!");
+            Outputer.println("Произошла ошибка при выполнении запроса DELETE_CHAPTER_BY_ID!");
             throw new DatabaseHandlingException();
         } finally {
             databaseHandler.closePreparedStatement(preparedDeleteChapterByIdStatement);
@@ -424,16 +431,17 @@ public class DatabaseCollectionManager {
      * @return Is everything ok.
      */
     public boolean checkMarineUserId(long marineId, User user) throws DatabaseHandlingException {
+        Outputer.println("checkMarineUserId(DatabaseCollectionManager)");
         PreparedStatement preparedSelectMarineByIdAndUserIdStatement = null;
         try {
             preparedSelectMarineByIdAndUserIdStatement = databaseHandler.getPreparedStatement(SELECT_MARINE_BY_ID_AND_USER_ID, false);
             preparedSelectMarineByIdAndUserIdStatement.setLong(1, marineId);
             preparedSelectMarineByIdAndUserIdStatement.setLong(2, databaseUserManager.getUserIdByUsername(user));
             ResultSet resultSet = preparedSelectMarineByIdAndUserIdStatement.executeQuery();
-            App.logger.info("Выполнен запрос SELECT_MARINE_BY_ID_AND_USER_ID.");
+            Outputer.println("Выполнен запрос SELECT_MARINE_BY_ID_AND_USER_ID.");
             return resultSet.next();
         } catch (SQLException exception) {
-            App.logger.error("Произошла ошибка при выполнении запроса SELECT_MARINE_BY_ID_AND_USER_ID!");
+            Outputer.println("Произошла ошибка при выполнении запроса SELECT_MARINE_BY_ID_AND_USER_ID!");
             throw new DatabaseHandlingException();
         } finally {
             databaseHandler.closePreparedStatement(preparedSelectMarineByIdAndUserIdStatement);
@@ -446,6 +454,7 @@ public class DatabaseCollectionManager {
      * @throws DatabaseHandlingException When there's exception inside.
      */
     public void clearCollection() throws DatabaseHandlingException {
+        Outputer.println("clearCollection(DatabaseCollectionManager)");
         NavigableSet<SpaceMarine> marineList = getCollection();
         for (SpaceMarine marine : marineList) {
             deleteMarineById(marine.getId());

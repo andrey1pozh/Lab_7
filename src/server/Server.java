@@ -67,7 +67,7 @@ public class Server {
     public void acquireConnection() {
         try {
             semaphore.acquire();
-            App.logger.info("Разрешение на новое соединение получено.");
+            Outputer.println("Разрешение на новое соединение получено.");
         } catch (InterruptedException exception) {
             Outputer.printerror("Произошла ошибка при получении разрешения на новое соединение!");
             App.logger.error("Произошла ошибка при получении разрешения на новое соединение!");
@@ -79,7 +79,7 @@ public class Server {
      */
     public void releaseConnection() {
         semaphore.release();
-        App.logger.info("Разрыв соединения зарегистрирован.");
+        Outputer.println("Разрыв соединения зарегистрирован.");
     }
 
     /**
@@ -87,7 +87,7 @@ public class Server {
      */
     public synchronized void stop() {
         try {
-            App.logger.info("Завершение работы сервера...");
+            Outputer.println("Завершение работы сервера...");
             if (serverSocket == null) throw new ClosingSocketException();
             isStopped = true;
             cachedThreadPool.shutdown();
@@ -118,9 +118,9 @@ public class Server {
      */
     private void openServerSocket() throws OpeningServerSocketException {
         try {
-            App.logger.info("Запуск сервера...");
+            Outputer.println("Запуск сервера...");
             serverSocket = new ServerSocket(port);
-            App.logger.info("Сервер запущен.");
+            Outputer.println("Сервер запущен.");
         } catch (IllegalArgumentException exception) {
             Outputer.printerror("Порт '" + port + "' находится за пределами возможных значений!");
             App.logger.fatal("Порт '" + port + "' находится за пределами возможных значений!");

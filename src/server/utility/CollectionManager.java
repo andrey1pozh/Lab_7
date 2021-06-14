@@ -8,6 +8,7 @@ import common.exceptions.DatabaseHandlingException;
 import common.utility.Outputer;
 import server.App;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.NavigableSet;
 import java.util.TreeSet;
@@ -30,6 +31,7 @@ public class CollectionManager {
      * @return Marines collection.
      */
     public NavigableSet<SpaceMarine> getCollection() {
+        Outputer.println("getCollection(CollectionManager)");
         return marinesCollection;
     }
 
@@ -37,6 +39,7 @@ public class CollectionManager {
      * @return Last initialization time or null if there wasn't initialization.
      */
     public LocalDateTime getLastInitTime() {
+        Outputer.println("getLastInitTime(CollectionManager)");
         return lastInitTime;
     }
 
@@ -44,6 +47,7 @@ public class CollectionManager {
      * @return Name of the collection's type.
      */
     public String collectionType() {
+        Outputer.println("collectionType(CollectionManager)");
         return marinesCollection.getClass().getName();
     }
 
@@ -51,6 +55,7 @@ public class CollectionManager {
      * @return Size of the collection.
      */
     public int collectionSize() {
+        Outputer.println("collectionSize(CollectionManager)");
         return marinesCollection.size();
     }
 
@@ -58,6 +63,7 @@ public class CollectionManager {
      * @return The first element of the collection or null if collection is empty.
      */
     public SpaceMarine getFirst() {
+        Outputer.println("getFirst(CollectionManager)");
         return marinesCollection.stream().findFirst().orElse(null);
     }
 
@@ -66,6 +72,7 @@ public class CollectionManager {
      * @return A marine by his ID or null if marine isn't found.
      */
     public SpaceMarine getById(Long id) {
+        Outputer.println("getById(CollectionManager)");
         return marinesCollection.stream().filter(marine -> marine.getId().equals(id)).findFirst().orElse(null);
     }
 
@@ -74,6 +81,7 @@ public class CollectionManager {
      * @return A marine by his value or null if marine isn't found.
      */
     public SpaceMarine getByValue(SpaceMarine marineToFind) {
+        Outputer.println("getByValue(CollectionManager)");
         return marinesCollection.stream().filter(marine -> marine.equals(marineToFind)).findFirst().orElse(null);
     }
 
@@ -81,6 +89,7 @@ public class CollectionManager {
      * @return Sum of all marines' health or 0 if collection is empty.
      */
     public double getSumOfHealth() {
+        Outputer.println("getSumOfHealth(CollectionManager)");
         return marinesCollection.stream()
                 .reduce(0.0, (sum, p) -> sum += p.getHealth(), Double::sum);
     }
@@ -89,6 +98,7 @@ public class CollectionManager {
      * @return Collection content or corresponding string if collection is empty.
      */
     public String showCollection() {
+        Outputer.println("showCollection(CollectionManager)");
         if (marinesCollection.isEmpty()) return "Коллекция пуста!";
         return marinesCollection.stream().reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
     }
@@ -98,6 +108,7 @@ public class CollectionManager {
      * @throws CollectionIsEmptyException If collection is empty.
      */
     public String maxByMeleeWeapon() throws CollectionIsEmptyException {
+        Outputer.println("maxByMeleeWeapon(CollectionManager)");
         if (marinesCollection.isEmpty()) throw new CollectionIsEmptyException();
 
         MeleeWeapon maxMeleeWeapon = marinesCollection.stream().map(marine -> marine.getMeleeWeapon())
@@ -111,6 +122,7 @@ public class CollectionManager {
      * @return Information about valid marines or empty string, if there's no such marines.
      */
     public String weaponFilteredInfo(Weapon weaponToFilter) {
+        Outputer.println("weaponFilteredInfo(CollectionManager)");
         return marinesCollection.stream().filter(marine -> marine.getWeaponType().equals(weaponToFilter))
                 .reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
     }
@@ -122,6 +134,7 @@ public class CollectionManager {
      * @return Greater marines list.
      */
     public NavigableSet<SpaceMarine> getGreater(SpaceMarine marineToCompare) {
+        Outputer.println("getGreater(CollectionManager)");
         return marinesCollection.stream().filter(marine -> marine.compareTo(marineToCompare) > 0).collect(
                 TreeSet::new,
                 TreeSet::add,
@@ -135,6 +148,7 @@ public class CollectionManager {
      * @param marine A marine to add.
      */
     public void addToCollection(SpaceMarine marine) {
+        Outputer.println("addToCollection(CollectionManager)");
         marinesCollection.add(marine);
     }
 
@@ -144,6 +158,7 @@ public class CollectionManager {
      * @param marine A marine to remove.
      */
     public void removeFromCollection(SpaceMarine marine) {
+        Outputer.println("removeFromCollection(CollectionManager)");
         marinesCollection.remove(marine);
     }
 
@@ -151,6 +166,7 @@ public class CollectionManager {
      * Clears the collection.
      */
     public void clearCollection() {
+        Outputer.println("clearCollection(CollectionManager)");
         marinesCollection.clear();
     }
 
@@ -159,14 +175,14 @@ public class CollectionManager {
      */
     private void loadCollection() {
         try {
-            Outputer.printerror("тест");
+            Outputer.println("loadCollection(CollectionManager)");
             marinesCollection = databaseCollectionManager.getCollection();
             lastInitTime = LocalDateTime.now();
             Outputer.println("Коллекция загружена.");
             App.logger.info("Коллекция загружена.");
         } catch (DatabaseHandlingException exception) {
             marinesCollection = new TreeSet<>();
-            Outputer.printerror("тест3");
+            Outputer.println("тест3(CollectionManager)");
             Outputer.printerror("Коллекция не может быть загружена!" + exception.getMessage());
             App.logger.error("Коллекция не может быть загружена!");
         }
