@@ -222,6 +222,7 @@ public class DatabaseCollectionManager {
                 );
             } else throw new SQLException();
         } catch (SQLException exception) {
+            Outputer.println(exception.getMessage());
             Outputer.println("Произошла ошибка при выполнении запроса SELECT_CHAPTER_BY_ID!");
             throw new SQLException(exception);
         } finally {
