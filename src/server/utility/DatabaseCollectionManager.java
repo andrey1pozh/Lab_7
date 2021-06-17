@@ -66,6 +66,8 @@ public class DatabaseCollectionManager {
             DatabaseHandler.COORDINATES_TABLE_X_COLUMN + " = ?, " +
             DatabaseHandler.COORDINATES_TABLE_Y_COLUMN + " = ?" + " WHERE " +
             DatabaseHandler.COORDINATES_TABLE_SPACE_MARINE_ID_COLUMN + " = ?";
+    private final String DELETE_COORDINATES_BY_ID = "DELETE FROM " + DatabaseHandler.COORDINATES_TABLE +
+            " WHERE " + DatabaseHandler.COORDINATES_TABLE_ID_COLUMN + " = ?";
     // CHAPTER_TABLE
     private final String SELECT_ALL_CHAPTER = "SELECT * FROM " + DatabaseHandler.CHAPTER_TABLE;
     private final String SELECT_CHAPTER_BY_ID = SELECT_ALL_CHAPTER +
@@ -162,12 +164,35 @@ public class DatabaseCollectionManager {
                 chapterId = resultSet.getLong(DatabaseHandler.MARINE_TABLE_CHAPTER_ID_COLUMN);
             } else throw new SQLException();
         } catch (SQLException exception) {
+            Outputer.println(exception.getMessage());
             Outputer.println("Произошла ошибка при выполнении запроса SELECT_MARINE_BY_ID!");
             throw new SQLException(exception);
         } finally {
             databaseHandler.closePreparedStatement(preparedSelectMarineByIdStatement);
         }
         return chapterId;
+    }
+
+    private long getCoordIdByMarineId(long marineId) throws SQLException {
+        Outputer.println("getCoordIdByMarineId(DatabaseCollectionManager)");
+        long CoordId;
+        PreparedStatement preparedSelectMarineByIdStatement = null;
+        try {
+            preparedSelectMarineByIdStatement = databaseHandler.getPreparedStatement(SELECT_MARINE_BY_ID, false);
+            preparedSelectMarineByIdStatement.setLong(1, marineId);
+            ResultSet resultSet = preparedSelectMarineByIdStatement.executeQuery();
+            Outputer.println("Выполнен запрос SELECT_MARINE_BY_ID.");
+            if (resultSet.next()) {
+                CoordId = resultSet.getLong(DatabaseHandler.COORDINATES_TABLE_ID_COLUMN);
+            } else throw new SQLException();
+        } catch (SQLException exception) {
+            Outputer.println(exception.getMessage());
+            Outputer.println("Произошла ошибка при выполнении запроса SELECT_MARINE_BY_ID!");
+            throw new SQLException(exception);
+        } finally {
+            databaseHandler.closePreparedStatement(preparedSelectMarineByIdStatement);
+        }
+        return CoordId;
     }
 
     /**
@@ -192,6 +217,7 @@ public class DatabaseCollectionManager {
                 );
             } else throw new SQLException();
         } catch (SQLException exception) {
+            Outputer.println(exception.getMessage());
             Outputer.println("Произошла ошибка при выполнении запроса SELECT_COORDINATES_BY_MARINE_ID!");
             throw new SQLException(exception);
         } finally {
@@ -410,13 +436,28 @@ public class DatabaseCollectionManager {
     public void deleteMarineById(long marineId) throws DatabaseHandlingException {
         Outputer.println("deleteMarineById(DatabaseCollectionManager)");
         PreparedStatement preparedDeleteChapterByIdStatement = null;
+        PreparedStatement preparedDeleteMarineByIdStatement = null;
+        PreparedStatement preparedDeleteCoordinatesByIdStatement = null;
         try {
             preparedDeleteChapterByIdStatement = databaseHandler.getPreparedStatement(DELETE_CHAPTER_BY_ID, false);
             preparedDeleteChapterByIdStatement.setLong(1, getChapterIdByMarineId(marineId));
+            Outputer.println("                          " + preparedDeleteChapterByIdStatement);
             if (preparedDeleteChapterByIdStatement.executeUpdate() == 0) Outputer.println(3);
+
+            preparedDeleteCoordinatesByIdStatement = databaseHandler.getPreparedStatement(DELETE_COORDINATES_BY_ID, false);
+            preparedDeleteCoordinatesByIdStatement.setLong(1, getCoordIdByMarineId(marineId));
+            Outputer.println("                          " + preparedDeleteCoordinatesByIdStatement);
+            if (preparedDeleteCoordinatesByIdStatement.executeUpdate() == 0) Outputer.println(3);
+
+            preparedDeleteMarineByIdStatement = databaseHandler.getPreparedStatement(DELETE_MARINE_BY_ID, false);
+            preparedDeleteMarineByIdStatement.setLong(1, marineId);
+            Outputer.println("                          " + preparedDeleteMarineByIdStatement);
+            if (preparedDeleteMarineByIdStatement.executeUpdate() == 0) Outputer.println(3);
+
             Outputer.println("Выполнен запрос DELETE_CHAPTER_BY_ID.");
         } catch (SQLException exception) {
-            Outputer.println("Произошла ошибка при выполнении запроса DELETE_CHAPTER_BY_ID!");
+            Outputer.println(exception.getMessage());
+            Outputer.println("Произошла ошибка при выполнении запроса DELETE_Marine_BY_ID!");
             throw new DatabaseHandlingException();
         } finally {
             databaseHandler.closePreparedStatement(preparedDeleteChapterByIdStatement);
